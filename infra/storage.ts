@@ -13,7 +13,7 @@ export const table = new sst.aws.Dynamo("Notes", {
 export const contentTable = new sst.aws.Dynamo("Content", {
   fields: {
     id: "string",
-    title: "string",
+    userId: 'string',
   },
-  primaryIndex: { hashKey: 'id', rangeKey: 'title' }
+  primaryIndex: { hashKey: 'userId', rangeKey: 'id' }
 });
