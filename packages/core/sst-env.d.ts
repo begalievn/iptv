@@ -14,6 +14,70 @@ declare module "sst" {
       "name": string
       "type": "sst.aws.Dynamo"
     }
+    "FirebaseApiKey": {
+      "type": "sst.sst.Secret"
+      "value": string
+    }
+    "FirebaseAppId": {
+      "type": "sst.sst.Secret"
+      "value": string
+    }
+    "FirebaseAuthDomain": {
+      "type": "sst.sst.Secret"
+      "value": string
+    }
+    "FirebaseAuthProviderCertUrl": {
+      "type": "sst.sst.Secret"
+      "value": string
+    }
+    "FirebaseAuthUri": {
+      "type": "sst.sst.Secret"
+      "value": string
+    }
+    "FirebaseClientCertUrl": {
+      "type": "sst.sst.Secret"
+      "value": string
+    }
+    "FirebaseClientEmail": {
+      "type": "sst.sst.Secret"
+      "value": string
+    }
+    "FirebaseClientId": {
+      "type": "sst.sst.Secret"
+      "value": string
+    }
+    "FirebaseMessagingSenderId": {
+      "type": "sst.sst.Secret"
+      "value": string
+    }
+    "FirebasePrivateKey": {
+      "type": "sst.sst.Secret"
+      "value": string
+    }
+    "FirebasePrivateKeyId": {
+      "type": "sst.sst.Secret"
+      "value": string
+    }
+    "FirebaseProjectId": {
+      "type": "sst.sst.Secret"
+      "value": string
+    }
+    "FirebaseStorageBucket": {
+      "type": "sst.sst.Secret"
+      "value": string
+    }
+    "FirebaseTokenUri": {
+      "type": "sst.sst.Secret"
+      "value": string
+    }
+    "FirebaseType": {
+      "type": "sst.sst.Secret"
+      "value": string
+    }
+    "FirebaseUniverseDomain": {
+      "type": "sst.sst.Secret"
+      "value": string
+    }
     "Frontend": {
       "type": "sst.aws.StaticSite"
       "url": string

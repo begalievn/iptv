@@ -5,11 +5,11 @@ import { GetCommand, DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
 
 const dynamoDb = DynamoDBDocumentClient.from(new DynamoDBClient({}));
 
-export const main = Util.handler(async (event) => {
+export const main = Util.authHandler(async (event) => {
   const params = {
     TableName: Resource.Content.name,
     Key: {
-      userId: event.requestContext.authorizer?.iam.cognitoIdentity.identityId,
+      userId: event.user.id,
       id: event?.pathParameters?.id,
     },
   };
