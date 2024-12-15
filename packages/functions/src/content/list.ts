@@ -5,22 +5,16 @@ import { QueryCommand, DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
 
 const dynamoDb = DynamoDBDocumentClient.from(new DynamoDBClient({}));
 
-export const main = Util.handler(async (event) => {
+export const main = Util.authHandler(async (event, context) => {
   const params = {
     TableName: Resource.Content.name,
-    // 'KeyConditionExpression' defines the condition for the query
-    // - 'userId = :userId': only return items with matching 'userId'
-    //   partition key
     KeyConditionExpression: "userId = :userId",
-    // 'ExpressionAttributeValues' defines the value in the condition
-    // - ':userId': defines 'userId' to be the id of the author
     ExpressionAttributeValues: {
-      ":userId": event.requestContext.authorizer?.iam.cognitoIdentity.identityId,
+      ":userId": event.user.id,
     },
   };
 
   const result = await dynamoDb.send(new QueryCommand(params));
 
-  // Return the matching list of items in response body
   return JSON.stringify(result.Items);
 });

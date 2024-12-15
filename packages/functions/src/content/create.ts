@@ -6,7 +6,7 @@ import { PutCommand, DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
 
 const dynamoDb = DynamoDBDocumentClient.from(new DynamoDBClient({}));
 
-export const main = Util.handler(async (event) => {
+export const main = Util.authHandler(async (event) => {
   let data = {
     title: "",
     description: "",
@@ -19,11 +19,11 @@ export const main = Util.handler(async (event) => {
   const params = {
     TableName: Resource.Content.name,
     Item: {
-      userId: event.requestContext.authorizer?.iam.cognitoIdentity.identityId,
+      userId: event.user.id,
       id: uuid.v1(),
-      title: data.title, // Parsed from request body
+      title: data.title,
       description: data.description,
-      createdAt: Date.now(), // Current Unix timestamp
+      createdAt: Date.now(),
     },
   };
 

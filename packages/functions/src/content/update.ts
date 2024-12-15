@@ -5,18 +5,15 @@ import { UpdateCommand, DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
 
 const dynamoDb = DynamoDBDocumentClient.from(new DynamoDBClient({}));
 
-export const main = Util.handler(async (event) => {
+export const main = Util.authHandler(async (event) => {
   const data = JSON.parse(event.body || "{}");
 
   const params = {
     TableName: Resource.Content.name,
     Key: {
-      // The attributes of the item to be created
-      userId: event.requestContext.authorizer?.iam.cognitoIdentity.identityId, // The id of the author
-      id: event?.pathParameters?.id, // The id of the note from the path
+      userId: event.user.id,
+      id: event?.pathParameters?.id,
     },
-    // 'UpdateExpression' defines the attributes to be updated
-    // 'ExpressionAttributeValues' defines the value in the update expression
     UpdateExpression: "SET title = :title, description = :description",
     ExpressionAttributeValues: {
       ":title": data.title || null,
