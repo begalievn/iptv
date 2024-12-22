@@ -1,6 +1,6 @@
 import { Context, APIGatewayProxyEvent } from "aws-lambda";
 import { admin } from "../firebase-config";
-import { APIGatewayProxyEventWithUser } from "../types/api-gateway-event-with-user.interface";
+import { APIGatewayProxyEventWithUser } from "../interfaces/api-gateway-event-with-user.interface";
 
 export module Util {
   export function handler(

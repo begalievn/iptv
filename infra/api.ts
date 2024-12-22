@@ -30,11 +30,11 @@ export const api = new sst.aws.ApiGatewayV2("Api", {
 api.route("POST /notes", "packages/functions/src/create.main");
 
 // Content
-api.route("POST /content", "packages/functions/src/content/create.main");
-api.route("GET /content/{id}", "packages/functions/src/content/get.main");
-api.route("GET /content", "packages/functions/src/content/list.main");
-api.route("PUT /content/{id}", "packages/functions/src/content/update.main");
-api.route("DELETE /content/{id}", "packages/functions/src/content/delete.main");
+api.route("POST /playlist", "packages/functions/src/playlist/create.main");
+api.route("GET /playlist/{id}", "packages/functions/src/playlist/get.main");
+api.route("GET /playlist", "packages/functions/src/playlist/list.main");
+api.route("PUT /playlist/{id}", "packages/functions/src/playlist/update.main");
+api.route("DELETE /playlist/{id}", "packages/functions/src/playlist/delete.main");
 
 // Uploads
 api.route("POST /upload", "packages/functions/src/upload/create.main");
