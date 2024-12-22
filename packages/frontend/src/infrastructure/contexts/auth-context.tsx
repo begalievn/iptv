@@ -1,6 +1,8 @@
 import React, { FC, useContext, useEffect, useState } from "react";
 import { auth } from "../firebase/firebase";
-import { onAuthStateChanged, User } from "firebase/auth";
+import { isSignInWithEmailLink, onAuthStateChanged, User } from "firebase/auth";
+import { getEmailFromStorage, signInWithEmail } from "../firebase/auth";
+import { TOKEY_KEY } from "../consts/local-storage-keys";
 
 interface IAutProviderProps {
   children: React.ReactNode;
@@ -29,7 +31,7 @@ const AuthProvider: FC<IAutProviderProps> = ({ children }) => {
       setUserLoggedIn(true);
       const token = await user.getIdToken();
       console.log('token', token);
-      localStorage.setItem('token', token);
+      localStorage.setItem(TOKEY_KEY, token);
     } else {
       setCurrentUser(null);
       setUserLoggedIn(false);
@@ -41,6 +43,20 @@ const AuthProvider: FC<IAutProviderProps> = ({ children }) => {
     const unsubscribe = onAuthStateChanged(auth, initializeUser);
 
     return unsubscribe;
+  }, []);
+
+  useEffect(() => {
+    const href = window.location.href;
+    if (href && isSignInWithEmailLink(auth, href)) {
+      const email = getEmailFromStorage();
+      if (email) {
+        (
+          async () => {
+            await signInWithEmail(email, href);
+          }
+        )();
+      }
+    }
   }, []);
 
   const value = {

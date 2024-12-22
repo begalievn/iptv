@@ -1,0 +1,58 @@
+.login {
+  width: 100%;
+  max-width: 500px;
+  margin: 40px auto 0;
+  padding: 30px 20px;
+  background-color: var(--card-background-color);
+  border: solid 1px var(--card-border-color);
+
+  .title {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+
+  .form {
+    width: 100%;
+    max-width: 450px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+
+    .email-sent {
+      text-align: center;
+    }
+
+    .form-box {
+      width: 100%;
+      
+      .field {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        margin-bottom: 15px;
+      }
+
+      .btns-container {
+        margin-top: 20px;
+
+        .btn {
+          width: 100%;
+        }
+
+        .or {
+          margin: 10px 0;
+          text-align: center;
+          display: flex;
+          align-items: center;
+          column-gap: 10px;
+
+          .or-line {
+            width: 100%;
+            border-bottom: solid 1px rgb(46, 46, 46);
+          }
+        }
+      }
+    }
+  }
+}

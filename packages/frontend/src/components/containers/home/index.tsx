@@ -1,4 +1,3 @@
-import React from "react";
 import s from "./styles.module.scss";
 
 const Home = () => {

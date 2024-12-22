@@ -1,0 +1,28 @@
+.wrapper {
+  margin-bottom: 10px;
+  font-family: 'Roboto' sans-serif;
+
+  .label {
+    display: block;
+    margin-bottom: 5px;
+    font-family: 'Roboto';
+  }
+
+  .textarea {
+    width: 100%;
+    padding: 8px;
+    font-size: 16px;
+    border: solid 1px black;
+    border-radius: 4px;
+    font-family: 'Roboto';
+  
+    &.error {
+      border: solid 1px red;
+    }
+  }
+}
+
+.error-msg {
+  color: red;
+  font-size: 14px;
+}

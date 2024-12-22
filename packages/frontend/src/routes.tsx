@@ -3,13 +3,57 @@ import Home from "./components/containers/home";
 import NotFound from "./components/containers/not-found";
 import Login from "./components/containers/login";
 import NewNote from "./components/containers/new-note";
+import SignUp from "./components/containers/sing-up";
+import UnauthenticatedRoute from "./components/elements/unauthenticated-route";
+import AuthenticatedRoute from "./components/elements/authenticated-route";
+import Playlists from "./components/containers/playlists";
+import { routes } from "./infrastructure/consts/routes";
+import Player from "./components/containers/player";
 
 export default function Links() {
   return (
     <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/notes/new" element={<NewNote />} />
+      <Route path={routes.home} element={<Home />} />
+      <Route
+        path={routes.login}
+        element={
+          <UnauthenticatedRoute>
+            <Login />
+          </UnauthenticatedRoute>
+        }
+      />
+      <Route
+        path={routes.signup}
+        element={
+          <UnauthenticatedRoute>
+            <SignUp />
+          </UnauthenticatedRoute>
+        }
+      />
+      <Route
+        path={routes.playlists}
+        element={
+          <AuthenticatedRoute>
+            <Playlists />
+          </AuthenticatedRoute>
+        }
+      />
+      <Route
+        path={routes.newPlaylist}
+        element={
+          <AuthenticatedRoute>
+            <NewNote />
+          </AuthenticatedRoute>
+        }
+      />
+      <Route
+        path={"/player/:id"}
+        element={
+          <AuthenticatedRoute>
+            <Player />
+          </AuthenticatedRoute>
+        }
+      />
       <Route path="*" element={<NotFound />} />
     </Routes>
   );

@@ -1,3 +1,4 @@
+import { EMAIL_LOCAL_STORAGE_KEY } from "../consts/local-storage-keys";
 import { auth } from "./firebase";
 import {
   createUserWithEmailAndPassword,
@@ -8,6 +9,8 @@ import {
   signInWithPopup,
   GoogleAuthProvider,
   User,
+  sendSignInLinkToEmail,
+  signInWithEmailLink,
 } from "firebase/auth";
 
 export const doCreateUserWithEmailAndPassword = async (email: string, password: string) => {
@@ -17,6 +20,20 @@ export const doCreateUserWithEmailAndPassword = async (email: string, password: 
 export const doSignInWithEmailAndPassword = (email: string, password: string) => {
   return signInWithEmailAndPassword(auth, email, password);
 };
+
+export const doSendLinkToEmail = async (email: string) => {
+  try {
+    const actionCodeSettings = {
+      url: location.href,
+      handleCodeInApp: true,
+    };
+
+    localStorage.setItem(EMAIL_LOCAL_STORAGE_KEY, email);
+    await sendSignInLinkToEmail(auth, email, actionCodeSettings);
+  } catch(error) {
+    console.error(error);
+  }
+}
 
 export const doSignInWithGoogle = async () => {
   const provider = new GoogleAuthProvider();
@@ -43,3 +60,20 @@ export const doSendEmailVerification = () => {
     url: `${window.location.origin}/home`,
   });
 };
+
+export const getEmailFromStorage = () => {
+  return window.localStorage.getItem(EMAIL_LOCAL_STORAGE_KEY);
+}
+
+export const signInWithEmail = async (email: string, href: string) => {
+  try {
+    await signInWithEmailLink(auth, email, href);
+    clearEmailFromStorage();
+  } catch(error) {
+    console.error(error);
+  }
+}
+
+const clearEmailFromStorage = () => {
+  window.localStorage.removeItem(EMAIL_LOCAL_STORAGE_KEY);
+}

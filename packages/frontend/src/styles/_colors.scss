@@ -1,0 +1,42 @@
+/* Dark Theme Colors */
+$neutral-0: #FFFFFF;
+$neutral-500: #949497;
+$neutral-700: #626264;
+$neutral-900: #1A1A1C;
+
+$dark-overlay-8: #2B2B2E;
+
+$primary-500: #846bda;
+
+/* New Colors for Dark Theme */
+$error-500-dark: #E57373;        // For error messages
+$error-700-dark: #B71C1C;        // For darker error highlights
+$warning-500-dark: #FFB74D;      // For warnings
+$warning-700-dark: #F57C00;      // For darker warnings
+$success-500-dark: #81C784;      // For success messages
+$success-700-dark: #388E3C;      // For darker success highlights
+$info-500-dark: #64B5F6;         // For informational messages
+$info-700-dark: #1976D2;         // For darker informational highlights
+$hover-overlay-dark: rgba(255, 255, 255, 0.1); // For hover effects
+
+/* Light Theme Colors */
+$white-1: #FFFFFF;
+$white-2: #F8F8F8;
+
+$black-1: #232323;
+
+$grey-2: #B4B4B7;
+$grey-3: #949497;
+
+$blue-1: #1274CF;
+
+/* New Colors for Light Theme */
+$error-500-light: #D32F2F;       // For error messages
+$error-700-light: #9A0007;       // For darker error highlights
+$warning-500-light: #FFA726;     // For warnings
+$warning-700-light: #EF6C00;     // For darker warnings
+$success-500-light: #66BB6A;     // For success messages
+$success-700-light: #2E7D32;     // For darker success highlights
+$info-500-light: #42A5F5;        // For informational messages
+$info-700-light: #1565C0;        // For darker informational highlights
+$hover-overlay-light: rgba(0, 0, 0, 0.05); // For hover effects

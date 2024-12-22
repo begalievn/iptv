@@ -4,7 +4,8 @@ import { BrowserRouter as Router } from "react-router-dom";
 import App from "./App.tsx";
 import { Amplify } from "aws-amplify";
 import config from "./config.ts";
-import "./index.css";
+import "./styles/index.scss";
+import ThemeProvider from "./infrastructure/contexts/theme-context.tsx";
 
 Amplify.configure({
   Auth: {
@@ -33,7 +34,9 @@ Amplify.configure({
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <Router>
-      <App />
+      <ThemeProvider>
+        <App />
+      </ThemeProvider>
     </Router>
   </StrictMode>
 );

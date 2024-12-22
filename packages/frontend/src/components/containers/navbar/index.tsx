@@ -2,10 +2,11 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../../infrastructure/contexts/auth-context";
 import { doSignOut } from "../../../infrastructure/firebase/auth";
 import { routes } from "../../../infrastructure/consts/routes";
+import InnerContainer from "../inner-container";
 import s from "./styles.module.scss";
 
 const Navbar = () => {
-  const { userLoggedIn } = useAuth();
+  const { userLoggedIn, loading } = useAuth();
   const nav = useNavigate();
 
   async function handleLogout() {
@@ -15,20 +16,34 @@ const Navbar = () => {
 
   return (
     <div className={s["nav"]}>
-      <Link className={s["logo"]} to={routes.home}>
-        <span>IPTV</span>
-      </Link>
-
-      <div className={s["links"]}>
-        {userLoggedIn ? (
-          <span onClick={handleLogout}>Logout</span>
-        ) : (
-          <>
-            <Link to={routes.signup}>Signup</Link>
-            <Link to={routes.login}>Login</Link>
-          </>
+      <InnerContainer className={s["box"]}>
+        <Link className={s["logo"]} to={routes.home}>
+          <span>IPTV</span>
+        </Link>
+        {loading ? null : (
+          <div className={s["links"]}>
+            {userLoggedIn ? (
+              <>
+                <Link to={routes.playlists} className={s["link"]}>
+                  Playlists
+                </Link>
+                <span onClick={handleLogout} className={s["link"]}>
+                  Logout
+                </span>
+              </>
+            ) : (
+              <>
+                <Link to={routes.signup} className={s["link"]}>
+                  Signup
+                </Link>
+                <Link to={routes.login} className={s["link"]}>
+                  Login
+                </Link>
+              </>
+            )}
+          </div>
         )}
-      </div>
+      </InnerContainer>
     </div>
   );
 };

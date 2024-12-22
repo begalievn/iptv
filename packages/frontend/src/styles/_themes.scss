@@ -1,0 +1,37 @@
+@use 'colors' as *;
+
+html[data-theme="dark"] {
+  --background-color: #{$neutral-900};
+  --color: #{$neutral-0};
+
+  --primary-color: #{$primary-500};
+  --secondary-color: #{$neutral-500};
+
+  --error-color: #{$error-500-dark};
+  --warning-color: #{$warning-500-dark};
+  --success-color: #{$success-500-dark};
+  --info-color: #{$info-500-dark};
+
+  --hover-overlay-color: #{$hover-overlay-dark};
+
+  --card-background-color: #{$dark-overlay-8};
+  --card-border-color: #{$neutral-700};
+}
+
+html[data-theme="light"] {
+  --background-color: #{$white-2};
+  --color: #{$black-1};
+
+  --primary-color: #{$blue-1};
+  --secondary-color: #{$grey-3};
+
+  --error-color: #{$error-500-light};
+  --warning-color: #{$warning-500-light};
+  --success-color: #{$success-500-light};
+  --info-color: #{$info-500-light};
+
+  --hover-overlay-color: #{$hover-overlay-light};
+
+  --card-background-color: #{$white-1};
+  --card-border-color: #{$grey-2};
+}
