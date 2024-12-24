@@ -1,30 +1,32 @@
-import { FC } from 'react'
-import s from './styles.module.scss';
-import PlayIcon from '../icons/play';
-import InfoIcon from '../icons/info';
-import { Playlist } from '../../../infrastructure/class/playlist';
+import { FC } from "react";
+import s from "./styles.module.scss";
+import PlayIcon from "../icons/play";
+import InfoIcon from "../icons/info";
+import { Playlist } from "../../../infrastructure/class/playlist";
+import { Link } from "react-router-dom";
+import { routes } from "../../../infrastructure/consts/routes";
 
-interface IContentItem {
+interface IPlaylistItem {
   playlist: Playlist;
 }
 
-const PlaylistItem: FC<IContentItem> = (props) => {
+const PlaylistItem: FC<IPlaylistItem> = (props) => {
   const { playlist } = props;
 
   return (
-    <div className={s['item']}>
-      <button className={s['play-btn']}>
+    <div className={s["item"]}>
+      <Link to={routes.player(playlist.id)} className={s["play-btn"]}>
         <PlayIcon />
-      </button>
-      <div className={s['content']}>
-        <p>{playlist.title}</p>
-        <p>{playlist.updatedAt.toLocaleDateString()}</p>
+      </Link>
+      <div className={s["content"]}>
+        <p className={s['title']}>{playlist.title}</p>
+        <p>{playlist.description}</p>
       </div>
-      <div className={s['info']}>
-        <InfoIcon className={s['info-icon']} />
-      </div>
+      <Link to={routes.playlistUpdate(playlist.id)} className={s["info"]}>
+        <InfoIcon className={s["info-icon"]} />
+      </Link>
     </div>
-  )
-}
+  );
+};
 
 export default PlaylistItem;

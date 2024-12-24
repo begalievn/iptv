@@ -10,7 +10,7 @@ export const table = new sst.aws.Dynamo("Notes", {
   primaryIndex: { hashKey: "userId", rangeKey: "noteId" },
 });
 
-export const contentTable = new sst.aws.Dynamo("Content", {
+export const contentTable = new sst.aws.Dynamo("Playlists", {
   fields: {
     id: "string",
     userId: 'string',

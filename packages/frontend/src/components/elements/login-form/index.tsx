@@ -33,7 +33,6 @@ const LoginForm: FC<ILoginFormProps> = (props) => {
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    console.log(fields);
     if (loading) {
       return;
     }

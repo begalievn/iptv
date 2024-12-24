@@ -8,6 +8,8 @@ export class Playlist {
   filename: string;
   createdAt: Date;
   updatedAt: Date;
+  presignedUrl: string | null;
+  playlistUrl: string | null;
 
   constructor(data: IPlaylist) {
     this.id = data.id;
@@ -17,5 +19,11 @@ export class Playlist {
     this.filename = data.filename;
     this.createdAt = new Date(data.createdAt);
     this.updatedAt = new Date(data.updatedAt);
+    this.presignedUrl = data.presignedUrl ? data.presignedUrl : null;
+    this.playlistUrl = data.playlistUrl ? data.playlistUrl : null;
+  }
+
+  getSourceUrl(): string {
+    return this.playlistUrl ?? this.presignedUrl ?? '';
   }
 }

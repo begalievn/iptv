@@ -7,7 +7,7 @@ const dynamoDb = DynamoDBDocumentClient.from(new DynamoDBClient({}));
 
 export const main = Util.authHandler(async (event) => {
   const params = {
-    TableName: Resource.Content.name,
+    TableName: Resource.Playlists.name,
     Key: {
       userId: event.user.id,
       id: event?.pathParameters?.id,

@@ -5,4 +5,6 @@ export const routes = {
   playlists: '/playlists',
   newPlaylist: '/playlist/new',
   player: (playlistId: string) => `/player/${playlistId}`,
+  playlistUpdate: (playlistId: string) => `/playlist/${playlistId}`,
+  profile: '/profile',
 }

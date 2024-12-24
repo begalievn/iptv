@@ -59,6 +59,12 @@ export module Util {
     };
   }
 
+  export async function deleteUser(userId: string) {
+    await admin.auth().deleteUser(userId);
+
+    return { status: true };
+  }
+
   function getHttpResponse(body: string, statusCode: number) {
     return {
       body,

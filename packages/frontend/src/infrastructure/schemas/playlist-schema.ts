@@ -1,27 +1,69 @@
 import { z } from "zod";
 
-const CreatePlaylistSchema = z.object({
-  title: z.string({ message: 'Please enter title'}).min(1, `Title shouldn't be empty`),
-  description: z.string({ message: 'Please enter description' }).min(1, `Description shouldn't be empty`),
-  file: z
-    .instanceof(FileList)
-    .refine((files) => files.length > 0, { message: "File is required" })
-    .refine(
-      (files) => files[0]?.size <= 5 * 1024 * 1024, // 5 MB
-      { message: "File size must be less than 5 MB" }
-    )
-    .refine(
-      (files) =>
-        ["image/jpeg", "image/png", "application/pdf"].includes(
-          files[0]?.type || ""
-        ),
-      { message: "Invalid file type. Only JPEG, PNG, and PDF are allowed" }
-    ),
+// Utility function to validate file extensions
+const validateFileExtension = (filename: string, allowedExtensions: string[]) => {
+  const fileExtension = filename.split(".").pop()?.toLowerCase();
+  return allowedExtensions.includes(fileExtension || "");
+};
+
+// Allowed extensions for both URL and file
+const allowedExtensions = ["m3u", "m3u8"];
+
+const CreatePlaylistSchema = z
+  .object({
+    title: z
+      .string({ message: "Please enter title" })
+      .min(1, `Title shouldn't be empty`),
+    description: z
+      .string({ message: "Please enter description" }),
+    playlistUrl: z
+      .string({ message: "Please enter a playlist URL" })
+      .optional(),
+    files: z
+      .instanceof(FileList)
+      .optional(),
+  })
+  .superRefine((arg, ctx) => {
+    // Check if neither playlistUrl nor file is provided
+    if (!arg.playlistUrl && (!arg.files || arg.files.length === 0)) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "You must provide either a playlist URL or a file",
+        path: ["files"],
+      });
+    }
+
+    // Validate playlistUrl if provided
+    if (arg.playlistUrl && !validateFileExtension(arg.playlistUrl, allowedExtensions)) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "URL must point to an M3U or M3U8 file",
+        path: ["playlistUrl"],
+      });
+    }
+
+    // Validate file if provided
+    if (arg.files && arg.files.length > 0) {
+      const fileName = arg.files[0]?.name || "";
+      if (!validateFileExtension(fileName, allowedExtensions)) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "Invalid file type. Only M3U and M3U8 files are allowed",
+          path: ['files'],
+        });
+      }
+    }
+  });
+
+const UpdatePlaylistSchema = CreatePlaylistSchema.superRefine((arg, ctx) => {
 });
 
 type CreatePlaylistSchemaType = z.infer<typeof CreatePlaylistSchema>;
+type UpdatePlaylistSchemaType = z.infer<typeof UpdatePlaylistSchema>;
 
 export { 
-  CreatePlaylistSchema,
+  CreatePlaylistSchema, 
+  UpdatePlaylistSchema,
   type CreatePlaylistSchemaType,
-}
+  type UpdatePlaylistSchemaType,
+ };

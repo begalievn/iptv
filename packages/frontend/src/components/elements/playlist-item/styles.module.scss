@@ -22,17 +22,20 @@
     width: 100%;
     height: 100%;
     padding: 5px;
+
+    .title {
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
   }
 
   .info {
     cursor: pointer;
-    &:hover {
-      color: var(--hover-overlay-color);
-    }
 
     .info-icon {
       width: 35px;
       height: 35px;
+      color: var(--info-color);
     }
   }
 }

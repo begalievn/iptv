@@ -19,9 +19,11 @@ const Playlists = () => {
       return <div>Something went wrong</div>;
     }
 
-    const playlists = data ? data.map((item) => new Playlist(item)) : [];
-
-    console.log("playlists", playlists);
+    const playlists = data
+      ? data
+          .map((item) => new Playlist(item))
+          .sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime())
+      : [];
 
     return (
       <div className={s["contents"]}>
@@ -34,10 +36,10 @@ const Playlists = () => {
 
   return (
     <div className={s["notes"]}>
-      <div className={s['heading']}>
+      <div className={s["heading"]}>
         <h1 className={s["title"]}>Playlists</h1>
-        <Link to={routes.newPlaylist} className={s['create-link']}>
-          <PlusIcon className={s['create-icon']} />
+        <Link to={routes.newPlaylist} className={s["create-link"]}>
+          <PlusIcon className={s["create-icon"]} />
         </Link>
       </div>
       {playlistsData}

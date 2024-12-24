@@ -10,7 +10,7 @@ interface CustomInputFieldProps
 
 const InputField = forwardRef<HTMLInputElement, CustomInputFieldProps>(
   (props, forwardedRef) => {
-    const { label, error, value, onChange, className, type, ...rest } = props;
+    const { label, error, className, type, ...rest } = props;
     const classNames = clsx(
       s["input"],
       {
@@ -25,8 +25,6 @@ const InputField = forwardRef<HTMLInputElement, CustomInputFieldProps>(
       <div className={s["wrapper"]}>
         {label && <label className={s["label"]}>{label}</label>}
         <input
-          value={value}
-          onChange={onChange}
           className={classNames}
           type={type}
           ref={forwardedRef}

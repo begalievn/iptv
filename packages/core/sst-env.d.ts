@@ -10,10 +10,6 @@ declare module "sst" {
       "type": "sst.aws.ApiGatewayV2"
       "url": string
     }
-    "Content": {
-      "name": string
-      "type": "sst.aws.Dynamo"
-    }
     "FirebaseApiKey": {
       "type": "sst.sst.Secret"
       "value": string
@@ -87,6 +83,10 @@ declare module "sst" {
       "type": "sst.aws.CognitoIdentityPool"
     }
     "Notes": {
+      "name": string
+      "type": "sst.aws.Dynamo"
+    }
+    "Playlists": {
       "name": string
       "type": "sst.aws.Dynamo"
     }

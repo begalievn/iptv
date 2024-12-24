@@ -2,13 +2,15 @@ import { Route, Routes } from "react-router-dom";
 import Home from "./components/containers/home";
 import NotFound from "./components/containers/not-found";
 import Login from "./components/containers/login";
-import NewNote from "./components/containers/new-note";
+import NewNote from "./components/containers/new-playlist";
 import SignUp from "./components/containers/sing-up";
 import UnauthenticatedRoute from "./components/elements/unauthenticated-route";
 import AuthenticatedRoute from "./components/elements/authenticated-route";
 import Playlists from "./components/containers/playlists";
 import { routes } from "./infrastructure/consts/routes";
 import Player from "./components/containers/player";
+import Profile from "./components/containers/profile";
+import UpdatePlaylist from "./components/containers/update-playlist";
 
 export default function Links() {
   return (
@@ -47,10 +49,26 @@ export default function Links() {
         }
       />
       <Route
+        path={'/playlist/:id'}
+        element={
+          <AuthenticatedRoute>
+            <UpdatePlaylist />
+          </AuthenticatedRoute>
+        }
+      />
+      <Route
         path={"/player/:id"}
         element={
           <AuthenticatedRoute>
             <Player />
+          </AuthenticatedRoute>
+        }
+      />
+      <Route
+        path={routes.profile}
+        element={
+          <AuthenticatedRoute>
+            <Profile />
           </AuthenticatedRoute>
         }
       />

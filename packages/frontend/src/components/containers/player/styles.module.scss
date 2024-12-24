@@ -1,3 +1,12 @@
 .player {
   padding: 20px 0;
+
+  .title {
+    @include title;
+    margin-bottom: 30px;
+  }
+
+  .box {
+    width: 100%;
+  }
 }

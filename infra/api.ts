@@ -38,3 +38,6 @@ api.route("DELETE /playlist/{id}", "packages/functions/src/playlist/delete.main"
 
 // Uploads
 api.route("POST /upload", "packages/functions/src/upload/create.main");
+
+// Users
+api.route("DELETE /user", "packages/functions/src/user/delete.main");

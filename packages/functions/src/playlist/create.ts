@@ -14,7 +14,7 @@ export const main = Util.authHandler(async (event) => {
   const validatedBody = validateBody(CreatePlaylistSchema, body);
 
   const params = {
-    TableName: Resource.Content.name,
+    TableName: Resource.Playlists.name,
     Item: {
       userId: event.user.id,
       id: uuid.v1(),
@@ -22,6 +22,7 @@ export const main = Util.authHandler(async (event) => {
       description: validatedBody.description,
       filename: validatedBody.filename,
       fileKey: validatedBody.fileKey,
+      playlistUrl: validatedBody.playlistUrl,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     },

@@ -1,0 +1,21 @@
+.new-note {
+  padding: 20px 0;
+
+  .title {
+    @include title;
+    margin-bottom: 30px;
+  };
+
+  .text-field {
+  }
+
+  .button-container {
+    margin-top: 30px;
+
+    .btn {
+      width: 100%;
+      max-width: 500px;
+      background-color: var(--primary-color);
+    }
+  }
+}

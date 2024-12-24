@@ -8,11 +8,12 @@ const dynamoDb = DynamoDBDocumentClient.from(new DynamoDBClient({}));
 export const main = Util.authHandler(async (event) => {
   const userId = event.user.id;
   const params = {
-    TableName: Resource.Content.name,
+    TableName: Resource.Playlists.name,
     KeyConditionExpression: "userId = :userId",
     ExpressionAttributeValues: {
       ":userId": userId,
     },
+    ScanIndexForward: false,
   };
 
   const result = await dynamoDb.send(new QueryCommand(params));

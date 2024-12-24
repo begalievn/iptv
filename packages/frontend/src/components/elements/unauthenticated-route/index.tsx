@@ -10,14 +10,14 @@ interface IUnauthenticatedRouteProps {
 const UnauthenticatedRoute: FC<IUnauthenticatedRouteProps> = (props) => {
   const { children } = props;
   const { userLoggedIn } = useAuth();
-  const location = useLocation();
-  const searchParams = new URLSearchParams(location.search);
+  // const location = useLocation();
+  // const searchParams = new URLSearchParams(location.search);
 
-  const redirectValue = searchParams.get('redirect');
-  const redirectRoute = redirectValue ? `${redirectValue}` : routes.home;
+  // const redirectValue = searchParams.get('redirect');
+  // const redirectRoute = redirectValue ? `${redirectValue}` : routes.home;
 
   if (userLoggedIn) {
-    return <Navigate to={redirectRoute} />;
+    return <Navigate to={routes.home} />;
   }
 
   return cloneElement(children, props);

@@ -1,31 +1,27 @@
-import React, { useRef, useState } from "react";
+import { useState } from "react";
 import axios from "axios";
-import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { SubmitHandler, useForm } from "react-hook-form";
 
-import config from "../../../config";
 import Button from "../../common/button";
 import InputField from "../../common/input";
 import TextAreaField from "../../common/textarea";
-import { useFormFields } from "../../../infrastructure/hooks/use-form-fields";
 import { usePlaylistMutation } from "../../../infrastructure/hooks/mutations/use-playlist-mutation";
-import s from "./styles.module.scss";
 import {
   CreatePlaylistSchema,
   CreatePlaylistSchemaType,
 } from "../../../infrastructure/schemas/playlist-schema";
+import { ICreatePlaylist } from "../../../../../core/src/interfaces";
+import s from "./styles.module.scss";
+import { useNavigate } from "react-router-dom";
+import { routes } from "../../../infrastructure/consts/routes";
 
-const API_URL = import.meta.env.VITE_API_URL;
 
 export default function NewNote() {
-  const file = useRef<null | File>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [fields, handleFieldChange] = useFormFields({
-    title: "",
-    description: "",
-  });
-  const { useCreatePlaylistMutation } = usePlaylistMutation();
-  const { mutateAsync, isPending, error } = useCreatePlaylistMutation();
+  const { useCreatePlaylistMutation, useCreatePresignedUrlMutation } = usePlaylistMutation();
+  const { mutateAsync } = useCreatePlaylistMutation();
+  const { mutateAsync: createPresignedUrl } = useCreatePresignedUrlMutation();
   const {
     register,
     handleSubmit,
@@ -33,76 +29,47 @@ export default function NewNote() {
   } = useForm<CreatePlaylistSchemaType>({
     resolver: zodResolver(CreatePlaylistSchema),
   });
-
-  console.log("errors", errors);
-
-  function validateForm() {
-    return fields.title.length > 0;
-  }
-
-  function handleFileChange(event: React.ChangeEvent<HTMLInputElement>) {
-    if (event.currentTarget.files === null) return;
-    file.current = event.currentTarget.files[0];
-  }
+  const nav = useNavigate();
 
   const onSubmit: SubmitHandler<CreatePlaylistSchemaType> = async (data) => {
     try {
       console.log("data", data);
-      const { title, description, file: [file] } = data;
-
-      if (file && file.size > config.MAX_ATTACHMENT_SIZE) {
-        alert(
-          `Please pick a file smaller than ${
-            config.MAX_ATTACHMENT_SIZE / 1000000
-          } MB.`
-        );
-        return;
-      }
+      const { title, description, files, playlistUrl } = data;
 
       setIsLoading(true);
 
-      const fileData = file;
-      const fileType = file?.type;
-      const filename = file.name || "";
-
-      const presignUrlEndpoint = `${API_URL}/upload`;
-      const token = localStorage.getItem("token");
-
-      const presignUrlResponse = await axios.post(
-        presignUrlEndpoint,
-        {
-          filename,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      console.log('presignedUrl', presignUrlResponse);
-
-      const { uploadUrl, fileKey } = presignUrlResponse.data;
-
-      await axios.put(uploadUrl, fileData, {
-        headers: {
-          "Content-Type": fileType,
-        },
-      });
-
-      const contentData = {
+      const contentData: ICreatePlaylist = {
         title,
         description,
-        fileKey,
-        filename,
+        playlistUrl,
       };
+
+      if (files && files.length) {
+        const fileData = files[0];
+        const fileType = fileData.type;
+        const filename = fileData.name;
+
+        const presignedUrlResponse = await createPresignedUrl({filename});
+
+        console.log("presignedUrl", presignedUrlResponse);
+
+        const { uploadUrl, fileKey } = presignedUrlResponse;
+
+        await axios.put(uploadUrl, fileData, {
+          headers: {
+            "Content-Type": fileType,
+          },
+        });
+
+        contentData.fileKey = fileKey;
+        contentData.filename = filename;
+      }
 
       const response = await mutateAsync(contentData);
 
       console.log("resonse data", response);
-
       setIsLoading(false);
+      nav(routes.playlists);
     } catch (error) {
       console.error(error);
     } finally {
@@ -112,7 +79,8 @@ export default function NewNote() {
 
   return (
     <div className={s["new-note"]}>
-      <form onSubmit={handleSubmit(onSubmit)} className="form">
+      <h1 className={s['title']}>Create a new Playlist</h1>
+      <form onSubmit={handleSubmit(onSubmit)} className={s['form']}>
         <div className="form-group">
           <InputField
             id="title"
@@ -134,14 +102,25 @@ export default function NewNote() {
             error={errors.description && errors.description.message}
           />
         </div>
+        <div>
+          <InputField
+            id="playlistUrl"
+            label="Playlist url"
+            className={s["text-field"]}
+            placeholder={"example.m3u8"}
+            {...register("playlistUrl")}
+            error={errors.playlistUrl && errors.playlistUrl.message}
+          />
+        </div>
         <div className="form-group">
           <InputField
-            id="file"
+            id="files"
             type="file"
+            accept=".m3u,.m3u8"
             label={"Attachment"}
             className="file-input"
-            {...register("file")}
-            error={errors.file && errors.file.message}
+            {...register("files")}
+            error={errors.files && errors.files.message}
           />
         </div>
         <div className={s["button-container"]}>

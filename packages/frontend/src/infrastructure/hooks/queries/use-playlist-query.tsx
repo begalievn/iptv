@@ -3,7 +3,8 @@ import { apiInstance } from "../../../lib/api";
 import { IPlaylist } from "../../../../../core/src/interfaces";
 
 interface IContentQuery {
-  useUserPlaylistsQuery: () => UseQueryResult<IPlaylist[], Error>
+  useUserPlaylistsQuery: () => UseQueryResult<IPlaylist[], Error>,
+  useUserPlaylistById: (id: string) => UseQueryResult<IPlaylist, Error>
 }
 
 export const usePlaylistQuery = (): IContentQuery => {
@@ -12,7 +13,13 @@ export const usePlaylistQuery = (): IContentQuery => {
     queryFn: () => apiInstance.getPlaylists(),
   });
 
+  const useUserPlaylistById = (id: string) => useQuery({
+    queryKey: ['playlist', id],
+    queryFn: () => apiInstance.getPlaylistById(id),
+  });
+
   return {
     useUserPlaylistsQuery,
+    useUserPlaylistById
   };
 }
