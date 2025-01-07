@@ -12,8 +12,10 @@ import { Playlist } from "../../../infrastructure/class/playlist";
 import { FC, useState } from "react";
 import clsx from "clsx";
 import { usePlaylistMutation } from "../../../infrastructure/hooks/mutations/use-playlist-mutation";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { routes } from "../../../infrastructure/consts/routes";
+import { IUpdatePlaylist } from "../../../../../core/src/interfaces";
+import axios from "axios";
 
 interface IUpdatePlaylistFormProps {
   data: Playlist;
@@ -24,9 +26,10 @@ const UpdatePlaylistForm: FC<IUpdatePlaylistFormProps> = (props) => {
   const { data, id } = props;
   const deleteBtnClassNames = clsx(s["btn"], s["delete"]);
   const [loading, setLoading] = useState(false);
-  const { useUpdatePlaylistMutation, useDeletePlaylistMutation } =
+  const { useUpdatePlaylistMutation, useDeletePlaylistMutation, useCreatePresignedUrlMutation } =
     usePlaylistMutation();
-  const { mutateAsync, isPending } = useUpdatePlaylistMutation();
+  const { mutateAsync: createPresignedUrl } = useCreatePresignedUrlMutation();
+  const { mutateAsync } = useUpdatePlaylistMutation();
   const { mutateAsync: deletePlaylist, isPending: deletePending } =
     useDeletePlaylistMutation();
   const nav = useNavigate();
@@ -47,19 +50,52 @@ const UpdatePlaylistForm: FC<IUpdatePlaylistFormProps> = (props) => {
   });
 
   const onSubmit: SubmitHandler<UpdatePlaylistSchemaType> = async (data) => {
-    console.log(data);
+    try {
+      console.log(data);
     setLoading(true);
-    await mutateAsync({ playlistId: id, updatePlaylist: data }).then(() => {
+    const { title, description, files, playlistUrl } = data;
+
+    const updatePlaylist: IUpdatePlaylist = {
+      title,
+      description,
+      playlistUrl,
+    };
+
+    if (files && files.length) {
+      const fileData = files[0];
+      const fileType = fileData.type;
+      const filename = fileData.name;
+
+      const presignedUrlResponse = await createPresignedUrl({filename});
+
+      const { uploadUrl, fileKey } = presignedUrlResponse;
+
+      await axios.put(uploadUrl, fileData, {
+        headers: {
+          "Content-Type": fileType,
+        },
+      });
+
+      updatePlaylist.fileKey = fileKey;
+      updatePlaylist.filename = filename;
+    }
+
+    await mutateAsync({ playlistId: id, updatePlaylist }).then((res) => {
       nav(routes.playlists);
+      console.log(res);
     });
-    setLoading(false);
+    } catch(error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleDelete = async () => {
     await deletePlaylist(id).then(() => {
       nav(routes.playlists);
     });
-  }
+  };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -104,12 +140,22 @@ const UpdatePlaylistForm: FC<IUpdatePlaylistFormProps> = (props) => {
           {...register("files")}
           error={errors.files && errors.files.message}
         />
+        {data.filename && (
+          <Link className={s['attachment-link']} target="_blank" to={data.presignedUrl || ""}>
+            {data.filename}
+          </Link>
+        )}
       </div>
       <div className={s["button-container"]}>
-        <Button type="submit" className={s["btn"]} isLoading={isPending}>
+        <Button type="submit" className={s["btn"]} isLoading={loading}>
           Update
         </Button>
-        <Button onClick={handleDelete} isLoading={deletePending} type="button" className={deleteBtnClassNames}>
+        <Button
+          onClick={handleDelete}
+          isLoading={deletePending}
+          type="button"
+          className={deleteBtnClassNames}
+        >
           Delete
         </Button>
       </div>
