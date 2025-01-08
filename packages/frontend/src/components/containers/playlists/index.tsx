@@ -18,13 +18,14 @@ const Playlists = () => {
     if (error) {
       return <div>Something went wrong</div>;
     }
+    console.log('data', data);
 
     const playlists = data
       ? data
           .map((item) => new Playlist(item))
           .sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime())
       : [];
-
+    console.log('playlists', playlists);
     return (
       <div className={s["contents"]}>
         {playlists.map((data) => (

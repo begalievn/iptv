@@ -1,0 +1,235 @@
+openapi: 3.0.3
+info:
+  title: IPTV
+  description: IPTV streaming app
+  version: 0.0.1
+servers:
+  - url: https://6hoc5iaid7.execute-api.us-east-1.amazonaws.com
+tags:
+  - name: Playlist
+    description: Playlists for IPTV
+paths:
+  /playlist:
+    post:
+      tags:
+        - Playlist
+      summary: Add a new playlist
+      description: Add a new playlist
+      operationId: addPlaylist
+      requestBody:
+        description: Create a new playlist
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePlaylist'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Playlist'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Playlist'
+        '400':
+          description: Invalid input
+        '422':
+          description: Validation exception
+      security:
+        - bearerAuth: []
+    put:
+      tags:
+        - Playlist
+      summary: Update an existing playlist
+      description: Update an existing playlist by Id
+      operationId: updatePlaylist
+      requestBody:
+        description: Update an existent playlist in the store
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatePlaylist'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Playlist'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Playlist'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Playlist not found
+        '422':
+          description: Validation exception
+      security:
+        - bearerAuth: []
+    get:
+      tags:
+        - Playlist
+      summary: Finds user's playlists
+      description: Find user's playlists
+      operationId: getUsersPlaylists
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Playlist'          
+      security:
+        - bearerAuth: []
+        
+  /playlist/{playlistId}:
+    get:
+      tags:
+        - Playlist
+      summary: Find pet by ID
+      description: Returns a single pet
+      operationId: getPlaylistById
+      parameters:
+        - name: playlistId
+          in: path
+          description: ID of a playlist to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Playlist'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Playlist'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Pet not found
+      security:
+        - bearerAuth: []
+        
+    delete:
+      tags:
+        - Playlist
+      summary: Deletes a playlist
+      description: delete a playlist
+      operationId: deletePlaylist
+      parameters:
+        - name: api_key
+          in: header
+          description: ''
+          required: false
+          schema:
+            type: string
+        - name: playlistId
+          in: path
+          description: Playlist id to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '400':
+          description: Invalid pet value
+      security:
+        - bearerAuth: []
+        
+components:
+  schemas:
+    Playlist:
+      required:
+        - name
+      type: object
+      properties:
+        id:
+          type: string
+          example: be014610-c100-11ef-b339-8f6b64d7a69e
+        title:
+          type: string
+          example: Entertainment
+        description: 
+          type: string
+          example: Entertainment playlist
+        filename: 
+          type: string
+          example: example.m3u8
+        fileKey: 
+          type: string
+          example: filekey
+        playlistUrl: 
+          type: string
+          example: https://st2.mediabay.tv/KG_KTRK-Balastan/index.m3u8
+        createdAt: 
+          type: string
+          example: "2024-12-24T08:27:42.698Z"
+        updatedAt:
+          type: string
+          example: "2024-12-24T08:27:42.698Z"
+    CreatePlaylist: 
+      type: object
+      required: 
+        - title
+      properties: 
+        title:
+          type: string
+          example: Entertainment
+        description: 
+          type: string
+          example: Entertainment playlist
+        filename: 
+          type: string
+          example: example.m3u8
+        fileKey: 
+          type: string
+          example: filekey
+        playlistUrl: 
+          type: string
+          example: https://st2.mediabay.tv/KG_KTRK-Balastan/index.m3u8
+    UpdatePlaylist: 
+      type: object
+      required: 
+        - title
+      properties: 
+        title:
+          type: string
+          example: Entertainment
+        description: 
+          type: string
+          example: Entertainment playlist
+        filename: 
+          type: string
+          example: example.m3u8
+        fileKey: 
+          type: string
+          example: filekey
+        playlistUrl: 
+          type: string
+          example: https://st2.mediabay.tv/KG_KTRK-Balastan/index.m3u8
+    ApiResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        type:
+          type: string
+        message:
+          type: string
+  securitySchemes:
+      
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
