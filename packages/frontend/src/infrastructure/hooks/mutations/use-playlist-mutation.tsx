@@ -27,7 +27,7 @@ interface IPlaylistMutation {
     ICreatePresignedUrl,
     unknown
   >;
-  useUpdatePlaylistMutation: () => UseMutationResult<
+  useUpdatePlaylistMutation: (id: string) => UseMutationResult<
     {
       status: true;
     },
@@ -61,12 +61,12 @@ export const usePlaylistMutation = (): IPlaylistMutation => {
       },
     });
 
-  const useUpdatePlaylistMutation = () =>
+  const useUpdatePlaylistMutation = (id: string) =>
     useMutation({
       mutationFn: apiInstance.updatePlaylist,
       onSuccess: () => {
         queryClient.invalidateQueries({
-          queryKey: ["playlists"],
+          queryKey: [`playlist ${id}`],
         });
       },
     });
@@ -90,6 +90,6 @@ export const usePlaylistMutation = (): IPlaylistMutation => {
     useCreatePlaylistMutation,
     useCreatePresignedUrlMutation,
     useUpdatePlaylistMutation,
-    useDeletePlaylistMutation
+    useDeletePlaylistMutation,
   };
 };

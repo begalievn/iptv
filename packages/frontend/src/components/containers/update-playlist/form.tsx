@@ -29,7 +29,7 @@ const UpdatePlaylistForm: FC<IUpdatePlaylistFormProps> = (props) => {
   const { useUpdatePlaylistMutation, useDeletePlaylistMutation, useCreatePresignedUrlMutation } =
     usePlaylistMutation();
   const { mutateAsync: createPresignedUrl } = useCreatePresignedUrlMutation();
-  const { mutateAsync } = useUpdatePlaylistMutation();
+  const { mutateAsync } = useUpdatePlaylistMutation(id);
   const { mutateAsync: deletePlaylist, isPending: deletePending } =
     useDeletePlaylistMutation();
   const nav = useNavigate();
@@ -37,6 +37,7 @@ const UpdatePlaylistForm: FC<IUpdatePlaylistFormProps> = (props) => {
   const defaultValues = {
     title: data.title,
     description: data.description,
+    mac_address: data.mac_address,
     playlistUrl: data.playlistUrl || "",
   };
 
@@ -53,12 +54,13 @@ const UpdatePlaylistForm: FC<IUpdatePlaylistFormProps> = (props) => {
     try {
       console.log(data);
     setLoading(true);
-    const { title, description, files, playlistUrl } = data;
+    const { title, description, mac_address, files, playlistUrl } = data;
 
     const updatePlaylist: IUpdatePlaylist = {
       title,
       description,
       playlistUrl,
+      mac_address,
     };
 
     if (files && files.length) {
@@ -118,6 +120,16 @@ const UpdatePlaylistForm: FC<IUpdatePlaylistFormProps> = (props) => {
           placeholder="Description"
           {...register("description")}
           error={errors.description && errors.description.message}
+        />
+      </div>
+      <div className={s["form-group"]}>
+        <InputField
+          id="mac_address"
+          placeholder="00:1A:2B:3C:4D:5E"
+          className={s["text-field"]}
+          label={"MAC address"}
+          {...register("mac_address")}
+          error={errors.mac_address && errors.mac_address.message}
         />
       </div>
       <div>
