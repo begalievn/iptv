@@ -20,6 +20,7 @@ export const main = Util.authHandler(async (event) => {
       id: uuid.v1(),
       title: validatedBody.title,
       description: validatedBody.description,
+      mac_address: validatedBody.mac_address,
       filename: validatedBody.filename,
       fileKey: validatedBody.fileKey,
       playlistUrl: validatedBody.playlistUrl,

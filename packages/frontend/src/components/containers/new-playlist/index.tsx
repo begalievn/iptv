@@ -34,13 +34,14 @@ export default function NewNote() {
   const onSubmit: SubmitHandler<CreatePlaylistSchemaType> = async (data) => {
     try {
       console.log("data", data);
-      const { title, description, files, playlistUrl } = data;
+      const { title, description, mac_address, files, playlistUrl } = data;
 
       setIsLoading(true);
 
       const contentData: ICreatePlaylist = {
         title,
         description,
+        mac_address,
         playlistUrl,
       };
 
@@ -100,6 +101,16 @@ export default function NewNote() {
             placeholder="Description"
             {...register("description")}
             error={errors.description && errors.description.message}
+          />
+        </div>
+        <div className={s["form-group"]}>
+          <InputField
+            id="mac_address"
+            label="MAC address"
+            className={s["text-field"]}
+            placeholder="00:1A:2B:3C:4D:5E"
+            {...register("mac_address")}
+            error={errors.mac_address && errors.mac_address.message}
           />
         </div>
         <div>

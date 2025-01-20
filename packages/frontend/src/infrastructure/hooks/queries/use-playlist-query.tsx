@@ -14,7 +14,7 @@ export const usePlaylistQuery = (): IContentQuery => {
   });
 
   const useUserPlaylistById = (id: string) => useQuery({
-    queryKey: ['playlist', id],
+    queryKey: [`playlist ${id}`],
     queryFn: () => apiInstance.getPlaylistById(id),
   });
 

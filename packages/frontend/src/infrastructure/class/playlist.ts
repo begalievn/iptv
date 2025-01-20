@@ -10,11 +10,13 @@ export class Playlist {
   updatedAt: Date;
   presignedUrl: string | null;
   playlistUrl: string | null;
+  mac_address: string;
 
   constructor(data: IPlaylist) {
     this.id = data.id;
     this.title = data.title;
     this.description = data.description;
+    this.mac_address = data.mac_address;
     this.fileKey = data.fileKey;
     this.filename = data.filename;
     this.createdAt = new Date(data.createdAt);
