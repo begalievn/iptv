@@ -26,9 +26,6 @@ export const api = new sst.aws.ApiGatewayV2("Api", {
   },
 });
 
-// Notes
-api.route("POST /notes", "packages/functions/src/create.main");
-
 // Content
 api.route("POST /playlist", "packages/functions/src/playlist/create.main");
 api.route("GET /playlist/{id}", "packages/functions/src/playlist/get.main");

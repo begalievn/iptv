@@ -1,23 +1,16 @@
-import { Resource } from "sst";
 import { Util } from "@iptv/core/util";
-import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
-import { QueryCommand, DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
+import { PlaylistRepository } from "../repositories/playlist.repository";
+import { StorageService } from "../services/storage.service";
+import { PlaylistService } from "../services/playlist.service";
 
-const dynamoDb = DynamoDBDocumentClient.from(new DynamoDBClient({}));
+const playlistRepo = new PlaylistRepository();
+const storageService = new StorageService();
+const playlistService = new PlaylistService(playlistRepo, storageService);
 
 export const main = Util.authHandler(async (event) => {
   const userId = event.user.id;
-  const params = {
-    TableName: Resource.Playlists.name,
-    KeyConditionExpression: "userId = :userId",
-    ExpressionAttributeValues: {
-      ":userId": userId,
-    },
-    ScanIndexForward: false,
-  };
 
-  const result = await dynamoDb.send(new QueryCommand(params));
-  const playlists = result.Items || [];
+  const playlists = await playlistService.listPlaylists(userId);
 
   return JSON.stringify(playlists);
 });

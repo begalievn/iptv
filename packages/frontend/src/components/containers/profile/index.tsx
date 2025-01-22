@@ -32,7 +32,7 @@ const Profile = () => {
       <div className={s["profile-content"]}>
         <div className={s["fields"]}>
           <div className={s["avatar-box"]}>
-            <img src={currentUser?.photoURL || ""} className={s["avatar"]} />
+            <img src={currentUser?.photoURL || ""} className={s["avatar"]} alt="prfile" />
           </div>
           <div className={s["field"]}>
             <label className={s["label"]}>Fullname</label>
