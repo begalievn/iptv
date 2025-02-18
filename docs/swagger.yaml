@@ -4,7 +4,7 @@ info:
   description: IPTV streaming app
   version: 0.0.1
 servers:
-  - url: https://6hoc5iaid7.execute-api.us-east-1.amazonaws.com
+  - url: https://khnmi83lig.execute-api.us-east-1.amazonaws.com
 tags:
   - name: Playlist
     description: Playlists for IPTV
@@ -162,6 +162,9 @@ components:
         description: 
           type: string
           example: Entertainment playlist
+        mac_address:
+          type: string
+          example: 00:1A:2B:3C:4D:5E
         filename: 
           type: string
           example: example.m3u8
@@ -188,6 +191,9 @@ components:
         description: 
           type: string
           example: Entertainment playlist
+        mac_address:
+          type: string
+          example: 00:1A:2B:3C:4D:5E
         filename: 
           type: string
           example: example.m3u8
@@ -208,6 +214,9 @@ components:
         description: 
           type: string
           example: Entertainment playlist
+        mac_address:
+          type: string
+          example: 00:1A:2B:3C:4D:5E
         filename: 
           type: string
           example: example.m3u8
