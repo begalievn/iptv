@@ -2,8 +2,8 @@ import { IPlaylist, ICreatePlaylist, IUpdatePlaylist } from './playlist.interfac
 import { APIGatewayProxyEventWithUser } from './api-gateway-event-with-user.interface';
 
 export { 
-  IPlaylist,
-  ICreatePlaylist,
-  IUpdatePlaylist,
-  APIGatewayProxyEventWithUser
+  type IPlaylist,
+  type ICreatePlaylist,
+  type IUpdatePlaylist,
+  type APIGatewayProxyEventWithUser
 }

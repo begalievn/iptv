@@ -1,6 +1,6 @@
 import { cloneElement, FC, ReactElement } from 'react'
 import { useAuth } from '../../../infrastructure/contexts/auth-context';
-import { Navigate, useLocation } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import { routes } from '../../../infrastructure/consts/routes';
 
 interface IUnauthenticatedRouteProps {
