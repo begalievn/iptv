@@ -32,6 +32,7 @@ api.route("GET /playlist/{id}", "packages/functions/src/playlist/get.main");
 api.route("GET /playlist", "packages/functions/src/playlist/list.main");
 api.route("PUT /playlist/{id}", "packages/functions/src/playlist/update.main");
 api.route("DELETE /playlist/{id}", "packages/functions/src/playlist/delete.main");
+api.route("GET /playlist/mac/{macAddress}", "packages/functions/src/playlist/get-by-mac-address.main");
 
 // Uploads
 api.route("POST /upload", "packages/functions/src/upload/create.main");

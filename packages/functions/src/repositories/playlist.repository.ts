@@ -1,5 +1,12 @@
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
-import { GetCommand, PutCommand, QueryCommand, UpdateCommand, DeleteCommand, DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
+import {
+  GetCommand,
+  PutCommand,
+  QueryCommand,
+  UpdateCommand,
+  DeleteCommand,
+  DynamoDBDocumentClient,
+} from "@aws-sdk/lib-dynamodb";
 import { IPlaylistRepository } from "../interfaces/playlist-repository.interface";
 import { Playlist } from "../entities/playlist.entity";
 import { Resource } from "sst";
@@ -29,8 +36,28 @@ export class PlaylistRepository implements IPlaylistRepository {
     return Item ? new Playlist(Item) : null;
   }
 
-  async listByUser(userId: string): Promise<Playlist[]> {
+  async getByMacAddress(
+    userId: string,
+    macAddress: string
+  ): Promise<Playlist[]> {
+    const params = {
+      TableName: Resource.Playlists.name,
+      IndexName: "macAddressIndex",
+      KeyConditionExpression: "mac_address = :mac_address AND userId = :userId",
+      ExpressionAttributeValues: {
+        ":mac_address": macAddress,
+        ":userId": userId,
+      },
+      ScanIndexForward: false,
+    };
 
+    const result = await dynamoDb.send(new QueryCommand(params));
+    return ((result.Items as Playlist[]) || []).map(
+      (item) => new Playlist(item)
+    );
+  }
+
+  async listByUser(userId: string): Promise<Playlist[]> {
     const params = {
       TableName: this.tableName,
       KeyConditionExpression: "userId = :userId",
@@ -40,19 +67,33 @@ export class PlaylistRepository implements IPlaylistRepository {
 
     const result = await dynamoDb.send(new QueryCommand(params));
 
-    console.log('result', result);
-    return (result.Items as Playlist[] || []).map(item => new Playlist(item));
+    console.log("result", result);
+    return ((result.Items as Playlist[]) || []).map(
+      (item) => new Playlist(item)
+    );
   }
 
-  async update(userId: string, playlistId: string, updates: Partial<Playlist>): Promise<void> {
+  async update(
+    userId: string,
+    playlistId: string,
+    updates: Partial<Playlist>
+  ): Promise<void> {
     const updateKeys = Object.keys(updates);
 
     const params = {
       TableName: this.tableName,
       Key: { userId, id: playlistId },
-      UpdateExpression: `SET ${updateKeys.map((k, i) => `#k${i} = :v${i}`).join(", ")}`,
-      ExpressionAttributeNames: updateKeys.reduce((acc, k, i) => ({ ...acc, [`#k${i}`]: k }), {}),
-      ExpressionAttributeValues: updateKeys.reduce((acc, k, i) => ({ ...acc, [`:v${i}`]: updates[k as keyof Playlist] }), {}),
+      UpdateExpression: `SET ${updateKeys
+        .map((k, i) => `#k${i} = :v${i}`)
+        .join(", ")}`,
+      ExpressionAttributeNames: updateKeys.reduce(
+        (acc, k, i) => ({ ...acc, [`#k${i}`]: k }),
+        {}
+      ),
+      ExpressionAttributeValues: updateKeys.reduce(
+        (acc, k, i) => ({ ...acc, [`:v${i}`]: updates[k as keyof Playlist] }),
+        {}
+      ),
     };
 
     await dynamoDb.send(new UpdateCommand(params));

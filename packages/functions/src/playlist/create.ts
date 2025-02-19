@@ -15,6 +15,6 @@ export const main = Util.authHandler(async (event) => {
   const body = JSON.parse(event.body || '');
   const validatedBody = validateBody(CreatePlaylistSchema, body);
 
-  const playlist = await playlistService.createPlaylist(userId, validatedBody);
+  const playlist = await playlistService.create(userId, validatedBody);
   return JSON.stringify(playlist);
 });

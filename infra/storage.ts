@@ -14,6 +14,10 @@ export const contentTable = new sst.aws.Dynamo("Playlists", {
   fields: {
     id: "string",
     userId: 'string',
+    mac_address: 'string',
   },
-  primaryIndex: { hashKey: 'userId', rangeKey: 'id' }
+  primaryIndex: { hashKey: 'userId', rangeKey: 'id' },
+  globalIndexes: {
+    macAddressIndex: { hashKey: "mac_address", rangeKey: "userId" },
+  },
 });
