@@ -7,4 +7,5 @@ export const routes = {
   player: (playlistId: string) => `/player/${playlistId}`,
   playlistUpdate: (playlistId: string) => `/playlist/${playlistId}`,
   profile: '/profile',
+  remoteAuth: '/auth',
 }

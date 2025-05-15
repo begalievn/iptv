@@ -89,6 +89,10 @@ declare module "sst" {
       "name": string
       "type": "sst.aws.Dynamo"
     }
+    "Session": {
+      "name": string
+      "type": "sst.aws.Dynamo"
+    }
     "Uploads": {
       "name": string
       "type": "sst.aws.Bucket"

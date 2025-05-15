@@ -40,6 +40,7 @@ export module Util {
 
         const idToken = token?.split(' ')[1] || '';
         const decodedToken = await admin.auth().verifyIdToken(idToken);
+   
         const user = {
           email: decodedToken?.email,
           id: decodedToken.uid,
@@ -51,7 +52,7 @@ export module Util {
       } catch (error) {
         statusCode = 500;
         body = JSON.stringify({
-          error: error instanceof Error ? error.message : String(error),
+          error: error instanceof Error ? error.message : error,
         });
       }
 
@@ -64,6 +65,17 @@ export module Util {
 
     return { status: true };
   }
+
+  export async function createCustomToken(userId: string) {
+    try {
+      const token = await admin.auth().createCustomToken(userId);
+
+      return token;
+    } catch(error) {
+      console.error(error);
+      return '';
+    }
+  } 
 
   function getHttpResponse(body: string, statusCode: number) {
     return {
