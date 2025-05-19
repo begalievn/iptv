@@ -64,14 +64,13 @@ export class SessionRepository implements ISessionRepository {
     return Item ? new Session(Item as ISession) : null;
   }
 
-  async getByCode(userId: string, code: string): Promise<Session | null> {
+  async getByCode(code: string): Promise<Session | null> {
     const params = {
       TableName: this.tableName,
       IndexName: "codeIndex",
-      KeyConditionExpression: "code = :code AND userId = :userId",
+      KeyConditionExpression: "code = :code",
       ExpressionAttributeValues: {
         ":code": code,
-        ":userId": userId,
       },
     };
 

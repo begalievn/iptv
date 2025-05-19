@@ -6,15 +6,14 @@ import { ISessionResponse } from "../interfaces/session.interface";
 const sessionRepo = new SessionRepository();
 const sessionService = new SessionService(sessionRepo);
 
-export const main = Util.authHandler(async (event) => {
+export const main = Util.handler(async (event) => {
   const { code } = event?.pathParameters || {};
-  const userId = event.user.id;
 
-  if (!code || !userId) {
+  if (!code) {
     throw new Error("Missing required parameters.");
   }
 
-  const session = await sessionService.getByCode(userId, code);
+  const session = await sessionService.getByCode(code);
 
   if (!session) {
     throw new Error("Session not found");

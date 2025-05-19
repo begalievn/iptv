@@ -42,8 +42,8 @@ export class SessionService {
     return await this.sessionRepo.getById(userId, sessionId);
   }
 
-  async getByCode(userId: string, code: string) {
-    return await this.sessionRepo.getByCode(userId, code);
+  async getByCode(code: string) {
+    return await this.sessionRepo.getByCode(code);
   }
 
   async delete(userId: string, sessionId: string) {
