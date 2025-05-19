@@ -11,6 +11,7 @@ import {
   User,
   sendSignInLinkToEmail,
   signInWithEmailLink,
+  getRedirectResult,
 } from "firebase/auth";
 
 export const doCreateUserWithEmailAndPassword = async (email: string, password: string) => {
@@ -72,6 +73,10 @@ export const signInWithEmail = async (email: string, href: string) => {
   } catch(error) {
     console.error(error);
   }
+}
+
+export const getFirebaseRedirectResult = async () => {
+  return getRedirectResult(auth);
 }
 
 const clearEmailFromStorage = () => {

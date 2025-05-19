@@ -11,6 +11,7 @@ import { routes } from "./infrastructure/consts/routes";
 import Player from "./components/containers/player";
 import Profile from "./components/containers/profile";
 import UpdatePlaylist from "./components/containers/update-playlist";
+import RemoteAuth from "./components/containers/remote-auth";
 
 export default function Links() {
   return (
@@ -69,6 +70,14 @@ export default function Links() {
         element={
           <AuthenticatedRoute>
             <Profile />
+          </AuthenticatedRoute>
+        }
+      />
+      <Route 
+        path={routes.remoteAuth}
+        element={
+          <AuthenticatedRoute>
+            <RemoteAuth />
           </AuthenticatedRoute>
         }
       />

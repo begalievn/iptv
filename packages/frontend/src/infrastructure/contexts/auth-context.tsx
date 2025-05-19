@@ -3,6 +3,7 @@ import { auth } from "../firebase/firebase";
 import { isSignInWithEmailLink, onAuthStateChanged, User } from "firebase/auth";
 import { getEmailFromStorage, signInWithEmail } from "../firebase/auth";
 import { TOKEY_KEY } from "../consts/local-storage-keys";
+import { AuthRedirectHandler } from "../../components/elements/auth-redirect-handler";
 
 interface IAutProviderProps {
   children: React.ReactNode;
@@ -30,7 +31,6 @@ const AuthProvider: FC<IAutProviderProps> = ({ children }) => {
       setCurrentUser({ ...user });
       setUserLoggedIn(true);
       const token = await user.getIdToken();
-      console.log('token', token);
       localStorage.setItem(TOKEY_KEY, token);
     } else {
       setCurrentUser(null);
@@ -67,6 +67,7 @@ const AuthProvider: FC<IAutProviderProps> = ({ children }) => {
 
   return (
     <AuthContext.Provider value={value}>
+      <AuthRedirectHandler />
       { children }
     </AuthContext.Provider>
   )

@@ -5,6 +5,7 @@ info:
   version: 0.0.1
 servers:
   - url: https://khnmi83lig.execute-api.us-east-1.amazonaws.com
+  - url: https://ev1133w1ti.execute-api.us-east-1.amazonaws.com
 tags:
   - name: Playlist
     description: Playlists for IPTV
@@ -145,7 +146,33 @@ paths:
           description: Invalid pet value
       security:
         - bearerAuth: []
-        
+  /playlist/mac/{macAddress}:
+    get:
+      tags:
+        - Playlist
+      summary: Finds user's playlists by mac-address
+      description: Find user's playlists by mac-address
+      operationId: getUsersPlaylistsByMacAddress
+      parameters:
+        - name: macAddress
+          in: path
+          description: mac-address
+          example: 00:1A:2B:3C:4D:5E
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Playlist'          
+      security:
+        - bearerAuth: []
+
 components:
   schemas:
     Playlist:

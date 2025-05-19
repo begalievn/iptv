@@ -24,7 +24,7 @@ export const main = Util.authHandler(async (event) => {
     throw new Error("Missing required parameters.");
   }
 
-  await playlistService.updatePlaylist(userId, playlistId, validatedBody);
+  await playlistService.update(userId, playlistId, validatedBody);
 
   return JSON.stringify({ status: true });
 });

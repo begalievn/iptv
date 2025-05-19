@@ -1,0 +1,23 @@
+.remote-auth-container {
+  padding: 30px;
+
+  .title {
+    text-align: center;
+    @include title2;
+  }
+
+  .no-code {
+    text-align: center;
+  }
+
+  .actions {
+    margin: 20px 0;
+    display: flex;
+    justify-content: center;
+    column-gap: 10px;
+
+    .btn {
+      width: 100px;
+    }
+  }
+}

@@ -4,9 +4,15 @@ import * as uuid from "uuid";
 import { IStorageService } from "../interfaces/storage-service.interface";
 
 export class PlaylistService {
-  constructor(private playlistRepo: IPlaylistRepository, private storageService: IStorageService) {}
+  constructor(
+    private playlistRepo: IPlaylistRepository,
+    private storageService: IStorageService
+  ) {}
 
-  async createPlaylist(userId: string, data: Partial<Playlist>): Promise<Playlist> {
+  async create(
+    userId: string,
+    data: Partial<Playlist>
+  ): Promise<Playlist> {
     const playlist = new Playlist({
       userId,
       id: uuid.v4(),
@@ -23,7 +29,7 @@ export class PlaylistService {
     return await this.playlistRepo.create(playlist);
   }
 
-  async deletePlaylist(userId: string, playlistId: string): Promise<void> {
+  async delete(userId: string, playlistId: string): Promise<void> {
     const playlist = await this.playlistRepo.getById(userId, playlistId);
     if (!playlist) throw new Error("Playlist not found");
 
@@ -34,20 +40,44 @@ export class PlaylistService {
     await this.playlistRepo.delete(userId, playlistId);
   }
 
-  async getPlaylist(userId: string, playlistId: string): Promise<Playlist | null> {
+  async get(
+    userId: string,
+    playlistId: string
+  ): Promise<Playlist | null> {
     const playlist = await this.playlistRepo.getById(userId, playlistId);
     if (playlist?.fileKey) {
-      playlist.presignedUrl = await this.storageService.getSignedUrl(playlist.fileKey);
+      playlist.presignedUrl = await this.storageService.getSignedUrl(
+        playlist.fileKey
+      );
     }
     return playlist;
   }
 
-  async listPlaylists(userId: string): Promise<Playlist[]> {
+  async getByMacAddress(
+    userId: string,
+    macAddress: string
+  ): Promise<Playlist[]> {
+    const playlist = await this.playlistRepo.getByMacAddress(
+      userId,
+      macAddress
+    );
+
+    return playlist;
+  }
+
+  async list(userId: string): Promise<Playlist[]> {
     return this.playlistRepo.listByUser(userId);
   }
 
-  async updatePlaylist(userId: string, playlistId: string, updates: Partial<Playlist>): Promise<void> {
-    const existingPlaylist = await this.playlistRepo.getById(userId, playlistId);
+  async update(
+    userId: string,
+    playlistId: string,
+    updates: Partial<Playlist>
+  ): Promise<void> {
+    const existingPlaylist = await this.playlistRepo.getById(
+      userId,
+      playlistId
+    );
     if (!existingPlaylist) {
       throw new Error("Playlist not found");
     }

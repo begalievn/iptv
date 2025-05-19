@@ -10,7 +10,7 @@ const playlistService = new PlaylistService(playlistRepo, storageService);
 export const main = Util.authHandler(async (event) => {
   const userId = event.user.id;
 
-  const playlists = await playlistService.listPlaylists(userId);
+  const playlists = await playlistService.list(userId);
 
   return JSON.stringify(playlists);
 });

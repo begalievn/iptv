@@ -33,7 +33,6 @@ const PlayerContainer: FC = () => {
       return "Something went wrong";
     }
 
-    console.log('data', data);
     const playlist = new Playlist(data);
 
     const videoJsOptions = {

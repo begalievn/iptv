@@ -14,7 +14,7 @@ export const main = Util.authHandler(async (event) => {
   if (!id || !userId) {
     throw new Error("Missing required parameters.");
   }
-  const playlist = await playlistService.getPlaylist(userId, id);
+  const playlist = await playlistService.get(userId, id);
 
   return JSON.stringify(playlist);
 });
