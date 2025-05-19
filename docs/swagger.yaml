@@ -9,6 +9,9 @@ servers:
 tags:
   - name: Playlist
     description: Playlists for IPTV
+  - name: Session
+    description: Sessions for IPTV
+
 paths:
   /playlist:
     post:
@@ -173,6 +176,60 @@ paths:
       security:
         - bearerAuth: []
 
+  /session:
+    post: 
+      tags:
+        - Session
+      summary: Create a session from web app
+      description: Create a session from web app with authenticated user
+      operationId: createSession
+      requestBody: 
+        description: Create a session
+        content: 
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateSession'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Session'          
+      security:
+        - bearerAuth: []
+
+  /session/code/{code}:
+    get:
+      tags:
+        - Session
+      summary: Get a session by code
+      description: Get custom token from Firebase admin app on the server by providing a code
+      operationId: getCustomToken
+      parameters:
+        - name: code
+          in: path
+          description: code of a session to get custom token
+          required: true
+          schema: 
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SessionResponse'          
+        '500':
+          description: Session not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error: 
+                    type: string
+                    example: Session not found
 components:
   schemas:
     Playlist:
@@ -253,6 +310,44 @@ components:
         playlistUrl: 
           type: string
           example: https://st2.mediabay.tv/KG_KTRK-Balastan/index.m3u8
+    Session:
+      type: object
+      properties:
+        id: 
+          type: string
+          example: be014610-c100-11ef-b339-8f6b64d7a69e
+        userId:
+          type: string
+          example: be014610-c100-11ef-b339-8f6b64d7asdf
+        code: 
+          type: string
+          example: be014610-c100-11ef-b339-8f6b64d7qwer
+        access_token:
+          type: string
+          example: eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJodHRwczovL2lkZW50aXR5dG9vbGtpdC5nb29nbGVhcGlzLmNvbS9nb29nbGUuaWRlbnRpdHkuaWRlbnRpdHl0b29sa2l0LnYxLklkZW50aXR5VG9vbGtpdCIsImlhdCI6MTc0NzY3NzQ4MCwiZXhwIjoxNzQ3NjgxMDgwLCJpc3MiOiJmaXJlYmFzZS1hZG1pbnNkay1ienpmOUBpcHR2LWVlZjI3LmlhbS5nc2VydmljZWFjY291bnQuY29tIiwic3ViIjoiZmlyZWJhc2UtYWRtaW5zZGstYnp6ZjlAaXB0di1lZWYyNy5pYW0uZ3NlcnZpY2VhY2NvdW50LmNvbSIsInVpZCI6IkVoYUJIN1VjdERiVFNYZGhPQjRoWFNVdE9vWjIifQ.BuMssInKd3oblGtUsBF00J14zWnFuEcuYIsJEncWigrj64dolBwmsczEctc8vHemx6kLqlCZN3zdOo_oR4kTyrVDdqB9_tmZYMgHoZ9N62QzxV5cDxfboBEit4bt8HohaT94G5PVVQAD4Kzw8YBwmKEvn7Vc2K37IEftgcEvyKzgvocB51Vs7w_F0np-Qz7RspRUTLlYoBh5ODRwY4V_kVo0Yq3Ae_0Ms-Yz-MfYhFDRrmqRb3GHmuiRLVMQ9OATwICM2VRod4u8BExCmPruEo_BRN3JeafBhuiLujeI1qEFY4yJ8uF3eGY048GKAQuRW_MoAUw-rwuF0kqx3JIThg
+        expiresAt:
+          type: number
+          example: 1747688280
+        createdAt: 
+          type: string
+          example: "2024-12-24T08:27:42.698Z"
+        updatedAt:
+          type: string
+          example: "2024-12-24T08:27:42.698Z"
+    CreateSession:
+      type: object
+      required:
+        code: string
+      properties: 
+        code: 
+          type: string
+          example: someuniquecode123
+    SessionResponse:
+      type: object
+      properties:
+        access_token: 
+          type: string
+          example: eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJodHRwczovL2lkZW50aXR5dG9vbGtpdC5nb29nbGVhcGlzLmNvbS9nb29nbGUuaWRlbnRpdHkuaWRlbnRpdHl0b29sa2l0LnYxLklkZW50aXR5VG9vbGtpdCIsImlhdCI6MTc0NzY3NzQ4MCwiZXhwIjoxNzQ3NjgxMDgwLCJpc3MiOiJmaXJlYmFzZS1hZG1pbnNkay1ienpmOUBpcHR2LWVlZjI3LmlhbS5nc2VydmljZWFjY291bnQuY29tIiwic3ViIjoiZmlyZWJhc2UtYWRtaW5zZGstYnp6ZjlAaXB0di1lZWYyNy5pYW0uZ3NlcnZpY2VhY2NvdW50LmNvbSIsInVpZCI6IkVoYUJIN1VjdERiVFNYZGhPQjRoWFNVdE9vWjIifQ.BuMssInKd3oblGtUsBF00J14zWnFuEcuYIsJEncWigrj64dolBwmsczEctc8vHemx6kLqlCZN3zdOo_oR4kTyrVDdqB9_tmZYMgHoZ9N62QzxV5cDxfboBEit4bt8HohaT94G5PVVQAD4Kzw8YBwmKEvn7Vc2K37IEftgcEvyKzgvocB51Vs7w_F0np-Qz7RspRUTLlYoBh5ODRwY4V_kVo0Yq3Ae_0Ms-Yz-MfYhFDRrmqRb3GHmuiRLVMQ9OATwICM2VRod4u8BExCmPruEo_BRN3JeafBhuiLujeI1qEFY4yJ8uF3eGY048GKAQuRW_MoAUw-rwuF0kqx3JIThg
     ApiResponse:
       type: object
       properties:
